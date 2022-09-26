@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://mesto.frontend.nomoredomains.sbs',
-  'http://mesto.frontend.nomoredomains.sbs',
+  'https://portfolio.nomorepartiesxyz.ru',
+  'http://portfolio.nomorepartiesxyz.ru',
   'http://localhost:3003',
   'http://127.0.0.1:3003',
 ];
