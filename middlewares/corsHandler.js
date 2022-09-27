@@ -1,30 +1,17 @@
-const allowedCors = [
-  'https://portfolio.nomorepartiesxyz.ru',
-  'http://portfolio.nomorepartiesxyz.ru',
-  'http://localhost:3003',
-  'http://127.0.0.1:3003',
-];
+const cors = require('cors');
 
-const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-
-const cors = (req, res, next) => {
-  const { method } = req;
-  const { origin } = req.headers;
-  const requestHeaders = req.headers['access-control-request-headers'];
-
-  res.header('Access-Control-Allow-Credentials', true);
-
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    return res.end();
-  }
-
-  return next();
+const options = {
+  origin: [
+    'https://portfolio.nomorepartiesxyz.ru',
+    'http://portfolio.nomorepartiesxyz.ru',
+    'http://localhost:3003',
+    'http://127.0.0.1:3003',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
+  credentials: true,
 };
 
-module.exports = cors;
+module.exports = cors(options);

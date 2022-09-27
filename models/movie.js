@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const linkValidator = require('../validators/linkValidator');
-const { nameRuValidator, nameRuErrorMessage } = require('../validators/nameRuValidator');
-const { nameEnValidator, nameEnErrorMessage } = require('../validators/nameEnValidator');
+const { nameRuValidator, nameRuErrorMessage } = require('../validators/movies/nameRuValidator');
+const { nameEnValidator, nameEnErrorMessage } = require('../validators/movies/nameEnValidator');
 
 const isNotValidLink = (link) => `${link} is not a valid link`;
 

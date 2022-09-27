@@ -1,37 +1,31 @@
-require('dotenv').config();
+const helmet = require('helmet');
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const limiter = require('./middlewares/rateLimiter');
 
-const authRouter = require('./routes/auth');
-const usersRouter = require('./routes/users');
-const moviesRouter = require('./routes/movies');
-const pageNotFoundRouter = require('./routes/pageNotFound');
-const auth = require('./middlewares/auth');
+const router = require('./routes/index');
+const { PORT, MONGO_DB_PATH } = require('./constants');
 const corsHandler = require('./middlewares/corsHandler');
 const { errorHandler } = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3002 } = process.env;
-
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(MONGO_DB_PATH, {
   useNewUrlParser: true,
 });
 
 const app = express();
 
+app.use(limiter);
+app.use(helmet());
 app.use(corsHandler);
 app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use(requestLogger);
-
-app.use('/', authRouter);
-app.use('/users', auth, usersRouter);
-app.use('/movies', auth, moviesRouter);
-app.use('/', pageNotFoundRouter);
+app.use('/', router);
 
 app.use(errorLogger);
 app.use(errors());

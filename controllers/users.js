@@ -2,12 +2,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const { NODE_ENV, JWT_SECRET } = require('../constants');
+
 const NotFoundError = require('../errors/notFoundError');
 const AlreadyExistsError = require('../errors/alreadyExistsError');
 const UnauthorizedError = require('../errors/unauthorizedError');
 const BadRequestError = require('../errors/badRequestError');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
 const jwtCookieName = 'jwt';
 
 module.exports.login = (req, res, next) => {
@@ -71,6 +72,11 @@ module.exports.updateUser = (req, res, next) => {
       res.send({ data: user });
     })
     .catch((err) => {
+      if (err.code === 11000) {
+        next(new AlreadyExistsError(`User with email=${email} already exist`));
+        return;
+      }
+
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         next(new BadRequestError(err.message));
         return;
@@ -94,7 +100,9 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => {
       const userObj = user.toObject();
       delete userObj.password;
-      res.send(userObj);
+      res
+        .clearCookie(jwtCookieName)
+        .send(userObj);
     })
     .catch((err) => {
       if (err.code === 11000) {
