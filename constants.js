@@ -7,9 +7,12 @@ const {
   JWT_SECRET,
 } = process.env;
 
+const getInvalidLinkMessage = (value) => `"${value}" is not a valid link. URL expected`;
+
 module.exports = {
   NODE_ENV,
   MONGO_DB_PATH,
   PORT,
   JWT_SECRET,
+  getInvalidLinkMessage,
 };

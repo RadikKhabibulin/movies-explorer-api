@@ -18,13 +18,13 @@ mongoose.connect(MONGO_DB_PATH, {
 
 const app = express();
 
+app.use(requestLogger);
 app.use(limiter);
 app.use(helmet());
 app.use(corsHandler);
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.use(requestLogger);
 app.use('/', router);
 
 app.use(errorLogger);

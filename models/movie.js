@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const linkValidator = require('../validators/linkValidator');
+const validator = require('validator');
+
+const { getInvalidLinkMessage } = require('../constants');
 const { nameRuValidator, nameRuErrorMessage } = require('../validators/movies/nameRuValidator');
 const { nameEnValidator, nameEnErrorMessage } = require('../validators/movies/nameEnValidator');
-
-const isNotValidLink = (link) => `${link} is not a valid link`;
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -32,24 +32,24 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: linkValidator,
-      message: (props) => isNotValidLink(props.value),
+      validator: validator.isURL,
+      message: (props) => getInvalidLinkMessage(props.value),
     },
   },
   trailerLink: {
     type: String,
     required: true,
     validate: {
-      validator: linkValidator,
-      message: (props) => isNotValidLink(props.value),
+      validator: validator.isURL,
+      message: (props) => getInvalidLinkMessage(props.value),
     },
   },
   thumbnail: {
     type: String,
     required: true,
     validate: {
-      validator: linkValidator,
-      message: (props) => isNotValidLink(props.value),
+      validator: validator.isURL,
+      message: (props) => getInvalidLinkMessage(props.value),
     },
   },
   owner: {
@@ -58,7 +58,8 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Number,
+    min: 1,
     required: true,
   },
   nameRU: {

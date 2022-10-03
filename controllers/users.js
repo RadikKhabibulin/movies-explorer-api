@@ -30,7 +30,7 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.logout = (req, res, _next) => {
+module.exports.logout = (req, res) => {
   res.clearCookie(jwtCookieName).send({ message: 'Successful logout' });
 };
 
@@ -43,14 +43,7 @@ module.exports.getUser = (req, res, next) => {
 
       res.send({ data: user });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new UnauthorizedError('Invalid token'));
-        return;
-      }
-
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports.updateUser = (req, res, next) => {

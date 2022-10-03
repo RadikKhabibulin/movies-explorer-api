@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-const linkRegex = require('../linkValidator');
+const { celebrateLinkValidator } = require('./linkValidator');
 const { nameRuRegex, nameRuErrorMessage } = require('./nameRuValidator');
 const { nameEnRegex, nameEnErrorMessage } = require('./nameEnValidator');
 
@@ -16,15 +16,14 @@ const createMovieValidator = celebrate({
       .max(new Date().getFullYear())
       .required(),
     description: Joi.string().required(),
-    image: Joi.string().required().regex(linkRegex),
-    trailerLink: Joi.string().required().regex(linkRegex),
-    thumbnail: Joi.string().required().regex(linkRegex),
+    image: Joi.string().required().custom(celebrateLinkValidator),
+    trailerLink: Joi.string().required().custom(celebrateLinkValidator),
+    thumbnail: Joi.string().required().custom(celebrateLinkValidator),
     movieId: Joi
-      .string()
-      .required()
-      .hex()
-      .min(24)
-      .max(24),
+      .number()
+      .integer()
+      .min(1)
+      .required(),
     nameRU: Joi
       .string()
       .regex(nameRuRegex)
