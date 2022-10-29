@@ -1,8 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
 const { celebrateLinkValidator } = require('./linkValidator');
-const { nameRuRegex, nameRuErrorMessage } = require('./nameRuValidator');
-const { nameEnRegex, nameEnErrorMessage } = require('./nameEnValidator');
 
 const createMovieValidator = celebrate({
   body: Joi.object().keys({
@@ -24,20 +22,8 @@ const createMovieValidator = celebrate({
       .integer()
       .min(1)
       .required(),
-    nameRU: Joi
-      .string()
-      .regex(nameRuRegex)
-      .required()
-      .messages({
-        'string.pattern.base': nameRuErrorMessage,
-      }),
-    nameEN: Joi
-      .string()
-      .regex(nameEnRegex)
-      .required()
-      .messages({
-        'string.pattern.base': nameEnErrorMessage,
-      }),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
