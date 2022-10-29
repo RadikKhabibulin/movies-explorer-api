@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const { getInvalidLinkMessage } = require('../constants');
-const { nameRuValidator, nameRuErrorMessage } = require('../validators/movies/nameRuValidator');
-const { nameEnValidator, nameEnErrorMessage } = require('../validators/movies/nameEnValidator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -65,18 +63,10 @@ const movieSchema = new mongoose.Schema({
   nameRU: {
     type: String,
     required: true,
-    validate: {
-      validator: nameRuValidator,
-      message: (props) => `${nameRuErrorMessage}. Received "${props.value}"`,
-    },
   },
   nameEN: {
     type: String,
     required: true,
-    validate: {
-      validator: nameEnValidator,
-      message: (props) => `${nameEnErrorMessage}. Received "${props.value}"`,
-    },
   },
 }, { versionKey: false });
 
